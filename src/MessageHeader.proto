@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package GaoProtobuf;
+option csharp_namespace = "GaoProtobuf";
+
+message MessageHeader {
+  int64 fromId = 1;
+  int64 toId = 2 ;
+  int64 groupId = 3;
+  int32 typeId = 4;
+  int32 namespaceId = 5;
+  int32 classId = 6;
+  int32 methodId = 7;
+}

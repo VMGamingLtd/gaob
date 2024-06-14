@@ -21,4 +21,4 @@ rm -rf $DST_DIR_CSHARP/*
 
 
 
-$PROTOC_CMD -I=$SRC_DIR -I=$HEADERS_DIR --cpp_out=$DST_DIR --csharp_out=$DST_DIR_CSHARP  $SRC_DIR/addressbook.proto
+$PROTOC_CMD -I=$SRC_DIR -I=$HEADERS_DIR --cpp_out=$DST_DIR --csharp_out=$DST_DIR_CSHARP  $SRC_DIR/*.proto

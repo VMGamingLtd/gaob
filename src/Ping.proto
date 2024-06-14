@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package GaoProtobuf;
+option csharp_namespace = "GaoProtobuf";
+
+message Ping {
+  string message = 1;
+};
+
+message Pong {
+  string message = 1;
+}
