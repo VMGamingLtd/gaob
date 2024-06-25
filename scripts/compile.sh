@@ -1,7 +1,8 @@
 #!/bin/bash
 set -xe
 
-PROTOC_CMD=../../protoc/protoc 
+#PROTOC_CMD=../../protoc/protoc 
+PROTOC_CMD=/c/w1/cpackages/bin/protoc 
 
 SRC_DIR=../src
 DST_DIR=../build

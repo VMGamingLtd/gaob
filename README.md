@@ -35,7 +35,42 @@ Update protocol buffers in gaow and gao projects:
 > cd scripts
 > ./proto_models_update_gaow.sh
 ```
+
+## Building protobuf on windows
+
+Open `x64 Naitive Tools Command Prompt for VS 2022`,
+
+Build and install `abseil`:
+
+```
+> cd /c/w1/build
+> git clone https://github.com/abseil/abseil-cpp.git
+> cd abseil-cpp
+> mkdir ../abseil-cpp_build
+> cd ../abseil-cpp_build
+> cmake ../abseil-cpp
+> cmake --build . --config Debug
+> cmake --install . --config Debug --prefix "/w1/cpackages"
+
+```
+
+Build and install `protobuf`:
+
+```
+> cd /c/w1/build
+> git clone https://github.com/protocolbuffers/protobuf.git
+> cd protobuf
+> git checkout v3.21.12
+> git submodule update --init --recursive
+> mkdir ../protobuf_build
+> cd ../protobuf_build
+> cmake ../protobuf -DCMAKE_CXX_STANDARD=14 -DCMAKE_INSTALL_PREFIX=/tmp/protobuf -Dprotobuf_ABSL_PROVIDER=package 
+> cmake --build . --config Debug 
+> cmake --install . --config Debug --prefix "/w1/cpackages"
+```
+
 ## Install Protocol Buffers For C# On Windows 
+
 
 Clone repository:
 
@@ -78,3 +113,19 @@ E.g you can copy `dll` inside `../gao/Assets/CompilerServicesUnsafe`
 After installing `System.Runtime.CompilerServices.Unsafe.dll` you will have to check `Allow unsafe Code` checkbox in menu `Edit > Project Settings > Player` in `Other Settings` section. 
 
 `Google.Protobuf` should compile ok in Unity now.
+
+## Build and update protobuf model stubs in gao and gaow projects.
+
+Build protobuf model stubs:
+```
+> cd /c/w1/gaob/scripts
+> ./compile.sh 
+```
+
+Update protobuf model stubs in `gao` and `gaow` projects:
+```
+> /c/w1/gaob/scripts
+> ./protobuf_models_update.sh
+```
+
+

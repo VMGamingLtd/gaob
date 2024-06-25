@@ -1,0 +1,47 @@
+{
+  "nested": {
+    "GaoProtobuf": {
+      "options": {
+        "csharp_namespace": "GaoProtobuf"
+      },
+      "nested": {
+        "MessageHeader": {
+          "fields": {
+            "fromId": {
+              "type": "int64",
+              "id": 1
+            },
+            "toId": {
+              "type": "int64",
+              "id": 2
+            },
+            "groupId": {
+              "type": "int64",
+              "id": 3
+            },
+            "typeId": {
+              "type": "int32",
+              "id": 4
+            },
+            "namespaceId": {
+              "type": "int32",
+              "id": 5
+            },
+            "classId": {
+              "type": "int32",
+              "id": 6
+            },
+            "methodId": {
+              "type": "int32",
+              "id": 7
+            },
+            "msg": {
+              "type": "string",
+              "id": 8
+            }
+          }
+        }
+      }
+    }
+  }
+}
