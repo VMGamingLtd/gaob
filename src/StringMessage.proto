@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package GaoProtobuf;
+option csharp_namespace = "GaoProtobuf";
+
+message StringMessage {
+  string str = 1;
+};

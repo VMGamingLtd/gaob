@@ -1,25 +1,58 @@
-import { IProtobufRoot } from "./proto";
+import { CProtobufRoot } from "./proto";
+import { CDispatcher } from "./dispatcher";
 
-export interface IWebSocketClient {
-  inboundMessages: ArrayBuffer[];
-  outboundMessages: ArrayBuffer[];
-}
 
-export function init(pbRoot: IProtobufRoot) {
+export class CWebSocketClient 
+{
+  ws: any;
+  dispatcher: CDispatcher;
+  isClosed: boolean;
 
-  var ws = new WebSocket('ws://localhost:8080');
-  ws.binaryType = 'arraybuffer';
+  static gPbRoot: CProtobufRoot = new CProtobufRoot(); 
+  static gWsClient: CWebSocketClient = new CWebSocketClient();
 
-  ws.onopen = function() {
-    console.log('connected');
-    ws.send('Hello Server!');
+  constructor() {
+    this.dispatcher = null;
+    this.isClosed = false;
+  }
+
+  start(): void {
+
+    this.ws = new WebSocket('ws://localhost:8080');
+    this.ws.binaryType = 'arraybuffer';
+
+    this.ws.onopen = () => {
+      console.log('connected');
+      this.dispatcher = new CDispatcher(CWebSocketClient.gPbRoot, CWebSocketClient.gWsClient);
+    };
+
+    this.ws.onmessage = (e: any) => {
+      if (e.data instanceof ArrayBuffer) {
+        console.log('message:', e.data);
+        if (this.dispatcher) {
+          this.dispatcher.dispatch(e.data);
+        } else {
+          console.warn('dispatcher not ready, message ignored');
+        }
+      } else {
+        console.error('received a non-arraybuffer message, ignored')
+      }
+    };
+
+    this.ws.onclose = () => {
+      console.log('disconnected');
+      this.isClosed = true;
+      CWebSocketClient.gWsClient = new CWebSocketClient();
+      CWebSocketClient.gWsClient.start();
+    };
+
   };
 
-  ws.onmessage = function(e) {
-    console.log('message:', e.data);
-  };
-
-  ws.onclose = function() {
-    console.log('disconnected');
-  };
+  send(message: ArrayBuffer): void {
+    if (!this.isClosed) {
+      this.ws.send(message);
+    } else {
+      console.warn('cannot send a message, websocket is closed, message ignored');
+    }
+  }
 }

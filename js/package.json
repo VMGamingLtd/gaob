@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "webpack --mode=development",
-    "build:prod": "webpack --mode=production"
+    "build:prod": "webpack --mode=production",
+    "build-jslib": "webpack --mode=development --config webpack-jslib.config.js",
+    "build-jslib:prod": "webpack --mode=production --config webpack-jslib.config.js"
   },
   "keywords": [],
   "author": "",

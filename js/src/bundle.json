@@ -34,10 +34,14 @@
             "methodId": {
               "type": "int32",
               "id": 7
-            },
-            "msg": {
+            }
+          }
+        },
+        "StringMessage": {
+          "fields": {
+            "str": {
               "type": "string",
-              "id": 8
+              "id": 1
             }
           }
         }
