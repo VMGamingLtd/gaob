@@ -14,9 +14,9 @@ export function getProtobufRoot(): IProtobufRoot {
 }
     */
 
-export class CProtobufRoot {
+export class ProtobufRoot {
     public root: any;
-    CProtobufRoot() {
+    ProtobufRoot() {
         this.root = protobuf.Root.fromJSON(ptotobufJsonDescriptor);
     }
 }

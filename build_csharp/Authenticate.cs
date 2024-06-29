@@ -24,17 +24,18 @@ namespace GaoProtobuf {
     static AuthenticateReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChJBdXRoZW50aWNhdGUucHJvdG8SC0dhb1Byb3RvYnVmIiQKE0F1dGhlbnRp",
-            "Y2F0ZVJlcXVlc3QSDQoFdG9rZW4YASABKAkiSQoUQXV0aGVudGljYXRlUmVz",
-            "cG9uc2USMQoGcmVzdWx0GAEgASgOMiEuR2FvUHJvdG9idWYuQXV0aGVudGlj",
-            "YXRpb25SZXN1bHQqQAoUQXV0aGVudGljYXRpb25SZXN1bHQSCwoHc3VjY2Vz",
-            "cxAAEhAKDHVuYXV0aG9yaXplZBABEgkKBWVycm9yEAJCDqoCC0dhb1Byb3Rv",
-            "YnVmYgZwcm90bzM="));
+            "ChJBdXRoZW50aWNhdGUucHJvdG8SC0dhb1Byb3RvYnVmIjcKE0F1dGhlbnRp",
+            "Y2F0ZVJlcXVlc3QSDQoFdG9rZW4YASABKAkSEQoJcmVxdWVzdElkGAIgASgJ",
+            "IlwKFEF1dGhlbnRpY2F0ZVJlc3BvbnNlEjEKBnJlc3VsdBgBIAEoDjIhLkdh",
+            "b1Byb3RvYnVmLkF1dGhlbnRpY2F0aW9uUmVzdWx0EhEKCXJlcXVlc3RJZBgC",
+            "IAEoCSpAChRBdXRoZW50aWNhdGlvblJlc3VsdBILCgdzdWNjZXNzEAASEAoM",
+            "dW5hdXRob3JpemVkEAESCQoFZXJyb3IQAkIOqgILR2FvUHJvdG9idWZiBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GaoProtobuf.AuthenticationResult), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::GaoProtobuf.AuthenticateRequest), global::GaoProtobuf.AuthenticateRequest.Parser, new[]{ "Token" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GaoProtobuf.AuthenticateResponse), global::GaoProtobuf.AuthenticateResponse.Parser, new[]{ "Result" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GaoProtobuf.AuthenticateRequest), global::GaoProtobuf.AuthenticateRequest.Parser, new[]{ "Token", "RequestId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GaoProtobuf.AuthenticateResponse), global::GaoProtobuf.AuthenticateResponse.Parser, new[]{ "Result", "RequestId" }, null, null, null, null)
           }));
     }
     #endregion
@@ -85,6 +86,7 @@ namespace GaoProtobuf {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public AuthenticateRequest(AuthenticateRequest other) : this() {
       token_ = other.token_;
+      requestId_ = other.requestId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -106,6 +108,18 @@ namespace GaoProtobuf {
       }
     }
 
+    /// <summary>Field number for the "requestId" field.</summary>
+    public const int RequestIdFieldNumber = 2;
+    private string requestId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string RequestId {
+      get { return requestId_; }
+      set {
+        requestId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -122,6 +136,7 @@ namespace GaoProtobuf {
         return true;
       }
       if (Token != other.Token) return false;
+      if (RequestId != other.RequestId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -130,6 +145,7 @@ namespace GaoProtobuf {
     public override int GetHashCode() {
       int hash = 1;
       if (Token.Length != 0) hash ^= Token.GetHashCode();
+      if (RequestId.Length != 0) hash ^= RequestId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -152,6 +168,10 @@ namespace GaoProtobuf {
         output.WriteRawTag(10);
         output.WriteString(Token);
       }
+      if (RequestId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(RequestId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -166,6 +186,10 @@ namespace GaoProtobuf {
         output.WriteRawTag(10);
         output.WriteString(Token);
       }
+      if (RequestId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(RequestId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -178,6 +202,9 @@ namespace GaoProtobuf {
       int size = 0;
       if (Token.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Token);
+      }
+      if (RequestId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RequestId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -193,6 +220,9 @@ namespace GaoProtobuf {
       }
       if (other.Token.Length != 0) {
         Token = other.Token;
+      }
+      if (other.RequestId.Length != 0) {
+        RequestId = other.RequestId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -213,6 +243,10 @@ namespace GaoProtobuf {
             Token = input.ReadString();
             break;
           }
+          case 18: {
+            RequestId = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -230,6 +264,10 @@ namespace GaoProtobuf {
             break;
           case 10: {
             Token = input.ReadString();
+            break;
+          }
+          case 18: {
+            RequestId = input.ReadString();
             break;
           }
         }
@@ -274,6 +312,7 @@ namespace GaoProtobuf {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public AuthenticateResponse(AuthenticateResponse other) : this() {
       result_ = other.result_;
+      requestId_ = other.requestId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -295,6 +334,18 @@ namespace GaoProtobuf {
       }
     }
 
+    /// <summary>Field number for the "requestId" field.</summary>
+    public const int RequestIdFieldNumber = 2;
+    private string requestId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string RequestId {
+      get { return requestId_; }
+      set {
+        requestId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -311,6 +362,7 @@ namespace GaoProtobuf {
         return true;
       }
       if (Result != other.Result) return false;
+      if (RequestId != other.RequestId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -319,6 +371,7 @@ namespace GaoProtobuf {
     public override int GetHashCode() {
       int hash = 1;
       if (Result != global::GaoProtobuf.AuthenticationResult.Success) hash ^= Result.GetHashCode();
+      if (RequestId.Length != 0) hash ^= RequestId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -341,6 +394,10 @@ namespace GaoProtobuf {
         output.WriteRawTag(8);
         output.WriteEnum((int) Result);
       }
+      if (RequestId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(RequestId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -355,6 +412,10 @@ namespace GaoProtobuf {
         output.WriteRawTag(8);
         output.WriteEnum((int) Result);
       }
+      if (RequestId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(RequestId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -367,6 +428,9 @@ namespace GaoProtobuf {
       int size = 0;
       if (Result != global::GaoProtobuf.AuthenticationResult.Success) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
+      }
+      if (RequestId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RequestId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -382,6 +446,9 @@ namespace GaoProtobuf {
       }
       if (other.Result != global::GaoProtobuf.AuthenticationResult.Success) {
         Result = other.Result;
+      }
+      if (other.RequestId.Length != 0) {
+        RequestId = other.RequestId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -402,6 +469,10 @@ namespace GaoProtobuf {
             Result = (global::GaoProtobuf.AuthenticationResult) input.ReadEnum();
             break;
           }
+          case 18: {
+            RequestId = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -419,6 +490,10 @@ namespace GaoProtobuf {
             break;
           case 8: {
             Result = (global::GaoProtobuf.AuthenticationResult) input.ReadEnum();
+            break;
+          }
+          case 18: {
+            RequestId = input.ReadString();
             break;
           }
         }

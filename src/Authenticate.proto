@@ -5,6 +5,7 @@ option csharp_namespace = "GaoProtobuf";
 
 message AuthenticateRequest {
   string token = 1;
+  string requestId = 2;
 };
 
 enum AuthenticationResult {
@@ -15,4 +16,5 @@ enum AuthenticationResult {
 
 message AuthenticateResponse {
   AuthenticationResult result = 1;
+  string requestId = 2;
 }

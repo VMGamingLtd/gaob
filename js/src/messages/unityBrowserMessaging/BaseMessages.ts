@@ -1,7 +1,7 @@
 
-import { CWebSocketClient } from '../../wsClient';
-import { CProtobufRoot } from '../../proto';
-import { CDispatcher } from '../../dispatcher';
+import { WebSocketClient } from '../../wsClient';
+import { ProtobufRoot } from '../../proto';
+import { Dispatcher } from '../../dispatcher';
 import {
     NAMESPACE_ID__UnityBrowserChannel,
     CLASS_ID_BaseMessages,
@@ -26,10 +26,10 @@ export class BaseMessages
             } else {
                 // unity is running in editor, call wsClient
 
-                let dispatcher: CDispatcher = CWebSocketClient.gWsClient.dispatcher;
+                let dispatcher: Dispatcher = WebSocketClient.gWsClient.dispatcher;
 
-                let pbMessageHeader = CWebSocketClient.gPbRoot.root.lookupType('GaoProtobuf.MessageHeader');
-                let pbMessageString = CWebSocketClient.gPbRoot.root.lookupType('GaoProtobuf.MessageString');
+                let pbMessageHeader = WebSocketClient.gPbRoot.root.lookupType('GaoProtobuf.MessageHeader');
+                let pbMessageString = WebSocketClient.gPbRoot.root.lookupType('GaoProtobuf.MessageString');
 
                 let moMessageHeader = pbMessageHeader.create({namespaceId: NAMESPACE_ID__UnityBrowserChannel, classId: NAMESPACE_ID__UnityBrowserChannel, methodId: METHOD_ID_ReceiveString});
                 let moMessageString = pbMessageString.create({str: str});
@@ -43,10 +43,10 @@ export class BaseMessages
                 data.set(new Uint8Array(dataMessageHeader), 0);
                 data.set(new Uint8Array(dataMessageString), dataMessageHeader.byteLength);
 
-                CWebSocketClient.gWsClient.send(data.buffer);
+                WebSocketClient.gWsClient.send(moMessageHeader, data.buffer);
             }
         } catch (err) {
             console.error(`${BaseMessages.CLASS_NAME}:${FUNC}: ${err}`);
         }
-
+    }
 }

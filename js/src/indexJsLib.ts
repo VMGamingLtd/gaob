@@ -25,7 +25,7 @@ export function  sendStringToUnity(str: string): void {
         if (!(window as any).GAO_UnityBrowserChannel.BaseMessages.sendString) {
             throw new Error('window.GAO_UnityBrowserChannel.BaseMessages.sendString is not defined');
         }
-        (window as any).GAO_UnityBrowserChannel.BaseMessages.reciveString(str);
+        (window as any).GAO_UnityBrowserChannel.BaseMessages.sendString(str);
     } catch (err) {
         console.error(`${FILE}:${FUNC}: ${err}`);
     }

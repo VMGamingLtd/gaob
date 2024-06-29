@@ -1,19 +1,24 @@
-import { CProtobufRoot } from "./proto";
-import { CDispatcher } from "./dispatcher";
+import { ProtobufRoot } from "./proto";
+import { Dispatcher } from "./dispatcher";
+import { NAMESPACE_ID__UnityBrowserChannel } from "./dispatcher";
 
 
-export class CWebSocketClient 
+export class WebSocketClient 
 {
-  ws: any;
-  dispatcher: CDispatcher;
-  isClosed: boolean;
+  static CLASS_NAME = 'WebSocketClient';
 
-  static gPbRoot: CProtobufRoot = new CProtobufRoot(); 
-  static gWsClient: CWebSocketClient = new CWebSocketClient();
+  ws: any;
+  dispatcher: Dispatcher;
+  private isClosed: boolean;
+  private isAuthenticated: boolean
+
+  static gPbRoot: ProtobufRoot = new ProtobufRoot(); 
+  static gWsClient: WebSocketClient = new WebSocketClient();
 
   constructor() {
     this.dispatcher = null;
     this.isClosed = false;
+    this.isAuthenticated = false;
   }
 
   start(): void {
@@ -23,7 +28,7 @@ export class CWebSocketClient
 
     this.ws.onopen = () => {
       console.log('connected');
-      this.dispatcher = new CDispatcher(CWebSocketClient.gPbRoot, CWebSocketClient.gWsClient);
+      this.dispatcher = new Dispatcher(WebSocketClient.gPbRoot, WebSocketClient.gWsClient);
     };
 
     this.ws.onmessage = (e: any) => {
@@ -42,17 +47,37 @@ export class CWebSocketClient
     this.ws.onclose = () => {
       console.log('disconnected');
       this.isClosed = true;
-      CWebSocketClient.gWsClient = new CWebSocketClient();
-      CWebSocketClient.gWsClient.start();
+      WebSocketClient.gWsClient = new WebSocketClient();
+      WebSocketClient.gWsClient.start();
     };
 
   };
 
-  send(message: ArrayBuffer): void {
+  checkIfAuthenticatedToSend(moMessageHeader: any): boolean {
+    if (moMessageHeader.namespaceId === NAMESPACE_ID__UnityBrowserChannel) {
+      return this.isAuthenticated;
+    } else {
+      return true;
+    }
+  }
+
+  send(moMessageHeader: any, message: ArrayBuffer): void {
+    if (!this.checkIfAuthenticatedToSend(moMessageHeader)) {
+      console.warn('cannot send a message, websocket is not authenticated, message ignored');
+      return;
+    }
     if (!this.isClosed) {
       this.ws.send(message);
     } else {
       console.warn('cannot send a message, websocket is closed, message ignored');
     }
+  }
+
+  setAuthenticated(): void {
+    this.isAuthenticated = true;
+  }
+
+  getIsAuthenticated(): boolean {
+    return this.isAuthenticated;
   }
 }
