@@ -9,6 +9,7 @@ import {
 
 const FILE = 'index.ts';
 
+WebSocketClient.gWsClient = new WebSocketClient();
 WebSocketClient.gWsClient.start();
 
 
@@ -39,4 +40,8 @@ export function  sendStringToUnity(str: string): void {
     } catch (err) {
         console.error(`${FILE}:${FUNC}: ${err}`);
     }
+}
+
+(window as any).GAO_SET_JWT_TOKEN = function(token: string): void {
+    WebSocketClient.setJwtToken(token);
 }

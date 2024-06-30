@@ -7,6 +7,7 @@ import {
     CLASS_ID_BaseMessages,
     METHOD_ID_ReceiveString
 } from '../../dispatcher';
+import { emitUnityMessageEvent } from '../../events';
 
 export class BaseMessages
 {
@@ -14,6 +15,10 @@ export class BaseMessages
     static receiveString(str: string): void {
         const FUNC = 'receiveString()';
         console.log(`${BaseMessages.CLASS_NAME}:${FUNC}: ${str}`);
+        try {
+            let json = JSON.parse(str);
+
+        }
     }
 
     static sendString(str: string): void {

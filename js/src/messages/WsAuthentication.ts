@@ -86,6 +86,7 @@ export class WsAuthentication {
             } else {
                 console.warn(`${WsAuthentication.CLASS}:${FUNC}: unknown result: ${moAuthenticateReqponse.result}`);
             }
+            delete WsAuthentication.requests[requestId];
         }
         else {
             console.warn(`${WsAuthentication.CLASS}:${FUNC}: request not found`);
@@ -93,20 +94,19 @@ export class WsAuthentication {
     }
 
     static diposeRequests(): void {
+        const FUNC = 'diposeRequests()';
         // dispose requests that are older than 10 seconds or have status other than AUTHENTICATING
         let now = new Date();
         for (let key in WsAuthentication.requests) {
             let request = WsAuthentication.requests[key];
-            if (now.getTime() - request.requestStartAt.getTime() > 10000 || 
-                    (request.authenticationStatus == AuthenticationStatus.AUTHENTICATED || 
-                    request.authenticationStatus == AuthenticationStatus.ERROR
-                )) {
+            if (now.getTime() - request.requestStartAt.getTime() > 10000) { 
+                  if (request.authenticationStatus != AuthenticationStatus.AUTHENTICATING) {
+                    console.warn(`${WsAuthentication.CLASS}:${FUNC}: request timed out: ${key}`);
+                  }
                 delete WsAuthentication.requests[key];
             }
         }
-
     }
-
 
 
 }
