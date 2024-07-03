@@ -10,7 +10,7 @@ import {
 const FILE = 'index.ts';
 
 WebSocketClient.gWsClient = new WebSocketClient();
-WebSocketClient.gWsClient.start();
+//WebSocketClient.gWsClient.start();
 
 
 export function  sendStringToUnity(str: string): void {

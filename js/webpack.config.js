@@ -3,7 +3,10 @@
   if (process.env.NODE_ENV !== 'production') {
     module.exports = {
       mode: 'development',
-      entry: './src/index.ts',
+      entry: [
+        './src/index.ts',
+        './src/App.tsx',
+      ],
       devtool: 'inline-source-map',
       module: {
         rules: [
@@ -11,6 +14,10 @@
             test: /\.tsx?$/,
             use: 'ts-loader',
             exclude: /node_modules/,
+          },
+          {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader'],
           },
         ],
       },
@@ -25,13 +32,20 @@
   } else {
     module.exports = {
       mode: 'production',
-      entry: './src/index.ts',
+      entry: [
+        './src/index.ts',
+        './src/App.tsx',
+      ],
       module: {
         rules: [
           {
             test: /\.tsx?$/,
             use: 'ts-loader',
             exclude: /node_modules/,
+          },
+          {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader'],
           },
         ],
       },
