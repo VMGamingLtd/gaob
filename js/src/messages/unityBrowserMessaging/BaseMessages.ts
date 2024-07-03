@@ -17,7 +17,9 @@ export class BaseMessages
         console.log(`${BaseMessages.CLASS_NAME}:${FUNC}: ${str}`);
         try {
             let json = JSON.parse(str);
-
+            emitUnityMessageEvent(json);
+        } catch (err) {
+            console.error(`${BaseMessages.CLASS_NAME}:${FUNC}: ${err}`);
         }
     }
 
