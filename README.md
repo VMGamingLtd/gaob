@@ -64,7 +64,7 @@ Build and install `protobuf`:
 > git submodule update --init --recursive
 > mkdir ../protobuf_build
 > cd ../protobuf_build
-> cmake ../protobuf -DCMAKE_CXX_STANDARD=14 -DCMAKE_INSTALL_PREFIX=/tmp/protobuf -Dprotobuf_ABSL_PROVIDER=package 
+> cmake ../protobuf -DCMAKE_CXX_STANDARD=14 -DCMAKE_INSTALL_PREFIX=/w1/cpackage -Dprotobuf_ABSL_PROVIDER=package 
 > cmake --build . --config Debug 
 > cmake --install . --config Debug --prefix "/w1/cpackages"
 ```
