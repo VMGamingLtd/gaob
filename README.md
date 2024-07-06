@@ -46,11 +46,12 @@ Build and install `abseil`:
 > cd /c/w1/build
 > git clone https://github.com/abseil/abseil-cpp.git
 > cd abseil-cpp
+> git checkout f04e489056d9be93072bb633d9818b1e2add6316
 > mkdir ../abseil-cpp_build
 > cd ../abseil-cpp_build
-> cmake ../abseil-cpp
-> cmake --build . --config Debug
-> cmake --install . --config Debug --prefix "/w1/cpackages"
+> cmake ../abseil-cpp -DCMAKE_INSTALL_PREFIX=/w1/cpackages -DABSL_PROPAGATE_CXX_STD=ON
+> cmake --build . --config Release
+> cmake --install . --config Relese --prefix /w1/cpackages
 
 ```
 
@@ -64,9 +65,9 @@ Build and install `protobuf`:
 > git submodule update --init --recursive
 > mkdir ../protobuf_build
 > cd ../protobuf_build
-> cmake ../protobuf -DCMAKE_CXX_STANDARD=14 -DCMAKE_INSTALL_PREFIX=/w1/cpackage -Dprotobuf_ABSL_PROVIDER=package 
-> cmake --build . --config Debug 
-> cmake --install . --config Debug --prefix "/w1/cpackages"
+> cmake ../protobuf -DCMAKE_CXX_STANDARD=14 -DCMAKE_INSTALL_PREFIX=/w1/cpackage 
+> cmake --build . --config Release 
+> cmake --install . --config Release --prefix "/w1/cpackages"
 ```
 
 ## Install Protocol Buffers For C# On Windows 
