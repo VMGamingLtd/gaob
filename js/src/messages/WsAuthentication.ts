@@ -5,6 +5,7 @@ import {
     METHOD_ID_AuthenticateRequest,
     METHOD_ID_AuthenticateResponse
 } from '../dispatcher';
+import { Dispatcher } from '../dispatcher';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -21,8 +22,8 @@ export class WsAuthentication {
     static CLASS = 'WsAuthentication';
     authenticationStatus: AuthenticationStatus = AuthenticationStatus.UNAUTHENTICATED;
 
-    static requests: {[key: string]: WsAuthentication};
-    private requestStartAt: Date;
+    static requests: {[key: string]: WsAuthentication} = {};
+    public requestStartAt: Date;
 
 
     private wsClient: WebSocketClient;
@@ -31,9 +32,10 @@ export class WsAuthentication {
         this.wsClient = wsClient;
     }
 
+
     public static authenticate(wsClient: WebSocketClient, token: string): void {
         const FUNC = 'authenticate()';
-        console.log(`${WsAuthentication.CLASS}:${FUNC}:`);
+        console.log(`${WsAuthentication.CLASS}:${FUNC}: authenticating...`);
 
         let wsAuthentication = new WsAuthentication(wsClient);
         try {
@@ -53,8 +55,8 @@ export class WsAuthentication {
 
 
             // encode message header
-            let dataMessageHeader = wsClient.dispatcher.encodeMessageObject(pbMessageHeader, moMessageHeader);
-            let dataAuthenticateRequest = wsClient.dispatcher.encodeMessageObject(pbAuthenticateRequest, moAuthenticateRequest);
+            let dataMessageHeader = Dispatcher.encodeMessageObject(pbMessageHeader, moMessageHeader);
+            let dataAuthenticateRequest = Dispatcher.encodeMessageObject(pbAuthenticateRequest, moAuthenticateRequest);
 
             // concatenate message header and message string
             let data = new Uint8Array(dataMessageHeader.byteLength + dataAuthenticateRequest.byteLength);
@@ -78,6 +80,7 @@ export class WsAuthentication {
         if (request) {
             if (moAuthenticateReqponse.result == pbAuthenticationResultEnum.values.success) {
                 request.authenticationStatus = AuthenticationStatus.AUTHENTICATED;
+                console.log(`${WsAuthentication.CLASS}:${FUNC}: athenticated`);
                 request.wsClient.setAuthenticated();
             } else if (moAuthenticateReqponse.result == pbAuthenticationResultEnum.values.unauthorized) {
                 request.authenticationStatus = AuthenticationStatus.UNAUTHENTICATED

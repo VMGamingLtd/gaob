@@ -25,7 +25,6 @@ export class BaseMessages
 
     static sendString(str: string): void {
         const FUNC = 'sendString()';
-        console.log(`${BaseMessages.CLASS_NAME}:${FUNC}: ${str}`);
         try
         {
             if ((window as any).GAO_UnityBrowserChannel) {
@@ -36,19 +35,19 @@ export class BaseMessages
                 let dispatcher: Dispatcher = WebSocketClient.gWsClient.dispatcher;
 
                 let pbMessageHeader = WebSocketClient.gPbRoot.root.lookupType('GaoProtobuf.MessageHeader');
-                let pbMessageString = WebSocketClient.gPbRoot.root.lookupType('GaoProtobuf.MessageString');
+                let pbStringMessage = WebSocketClient.gPbRoot.root.lookupType('GaoProtobuf.StringMessage');
 
-                let moMessageHeader = pbMessageHeader.create({namespaceId: NAMESPACE_ID__UnityBrowserChannel, classId: NAMESPACE_ID__UnityBrowserChannel, methodId: METHOD_ID_ReceiveString});
-                let moMessageString = pbMessageString.create({str: str});
+                let moMessageHeader = pbMessageHeader.create({namespaceId: NAMESPACE_ID__UnityBrowserChannel, classId: CLASS_ID_BaseMessages, methodId: METHOD_ID_ReceiveString});
+                let moStringMessage = pbStringMessage.create({str: str});
 
                 // encode message header
-                let dataMessageHeader = dispatcher.encodeMessageObject(pbMessageHeader, moMessageHeader);
-                let dataMessageString = dispatcher.encodeMessageObject(pbMessageString, moMessageString);
+                let dataMessageHeader = Dispatcher.encodeMessageObject(pbMessageHeader, moMessageHeader);
+                let dataStringMessage = Dispatcher.encodeMessageObject(pbStringMessage, moStringMessage);
 
                 // concatenate message header and message string
-                let data = new Uint8Array(dataMessageHeader.byteLength + dataMessageString.byteLength);
+                let data = new Uint8Array(dataMessageHeader.byteLength + dataStringMessage.byteLength);
                 data.set(new Uint8Array(dataMessageHeader), 0);
-                data.set(new Uint8Array(dataMessageString), dataMessageHeader.byteLength);
+                data.set(new Uint8Array(dataStringMessage), dataMessageHeader.byteLength);
 
                 WebSocketClient.gWsClient.send(moMessageHeader, data.buffer);
             }

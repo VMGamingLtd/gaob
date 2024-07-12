@@ -1,4 +1,5 @@
   const path = require('path');
+  const HtmlWebpackPlugin = require('html-webpack-plugin');
 
   if (process.env.NODE_ENV !== 'production') {
     module.exports = {
@@ -12,7 +13,12 @@
         rules: [
           {
             test: /\.tsx?$/,
-            use: 'ts-loader',
+            use: {
+              loader: 'ts-loader',
+              options: {
+                configFile: 'tsconfig.json'
+              },
+            },
             exclude: /node_modules/,
           },
           {
@@ -28,6 +34,7 @@
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),
       },
+      plugins: [new HtmlWebpackPlugin()],
     };
   } else {
     module.exports = {
@@ -40,7 +47,12 @@
         rules: [
           {
             test: /\.tsx?$/,
-            use: 'ts-loader',
+            use: {
+              loader: 'ts-loader',
+              options: {
+                configFile: '../tsconfig.prod.json'
+              },
+            },
             exclude: /node_modules/,
           },
           {
@@ -56,5 +68,6 @@
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),
       },
+      plugins: [new HtmlWebpackPlugin()],
     };
   }

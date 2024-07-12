@@ -2,6 +2,7 @@ import { ProtobufRoot } from "./proto";
 import { Dispatcher } from "./dispatcher";
 import { WsAuthentication } from "./messages/WsAuthentication";
 import { NAMESPACE_ID__UnityBrowserChannel } from "./dispatcher";
+import { WEBSOCKET_SERVER_URL } from "./config"
 
 
 export class WebSocketClient 
@@ -10,7 +11,6 @@ export class WebSocketClient
 
   ws: any;
   dispatcher: Dispatcher;
-  private isClosed: boolean;
   private isAuthenticated: boolean
 
   static gPbRoot: ProtobufRoot = new ProtobufRoot(); 
@@ -19,7 +19,6 @@ export class WebSocketClient
 
   constructor() {
     this.dispatcher = null;
-    this.isClosed = false;
     this.isAuthenticated = false;
   }
 
@@ -32,7 +31,7 @@ export class WebSocketClient
 
   start(): void {
 
-    this.ws = new WebSocket('ws://localhost:8080');
+    this.ws = new WebSocket(WEBSOCKET_SERVER_URL);
     this.ws.binaryType = 'arraybuffer';
     this.isAuthenticated = false;
 
@@ -47,7 +46,6 @@ export class WebSocketClient
     this.ws.onmessage = (e: any) => {
       const FUNC = 'onmessage()';
       if (e.data instanceof ArrayBuffer) {
-        console.log('message:', e.data);
         if (this.dispatcher) {
           this.dispatcher.dispatch(e.data);
         } else {
@@ -60,9 +58,10 @@ export class WebSocketClient
 
     this.ws.onclose = () => {
       console.log('disconnected');
-      this.isClosed = true;
-      WebSocketClient.gWsClient = new WebSocketClient();
-      WebSocketClient.gWsClient.start();
+      setTimeout(() => {
+        WebSocketClient.gWsClient = new WebSocketClient();
+        WebSocketClient.gWsClient.start();
+      }, 9000)
     };
 
   };
@@ -81,11 +80,11 @@ export class WebSocketClient
       console.warn(`${WebSocketClient.CLASS}:${FUNC}: cannot send a message, websocket is not authenticated, message ignored`);
       return;
     }
-    if (!this.isClosed) {
-      this.ws.send(message);
-    } else {
-      console.warn(`${WebSocketClient.CLASS}:${FUNC}: cannot send a message, websocket is closed, message ignored`);
+    if (this.ws.readyState !== WebSocket.OPEN) {
+        console.warn(`${WebSocketClient.CLASS}:${FUNC}: ws is not open, message ignored`);
+        return;
     }
+    this.ws.send(message);
   }
 
   setAuthenticated(): void {

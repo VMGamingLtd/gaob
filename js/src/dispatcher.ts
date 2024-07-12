@@ -29,22 +29,22 @@ export class Dispatcher
 
     }
 
-    readMessageObjectSize(message: ArrayBuffer, offset: number): number {
+    private static readMessageObjectSize(message: ArrayBuffer, offset: number): number {
         let view = new DataView(message);
-        return view.getUint32(offset, true);
+        return view.getUint32(offset, false);
     }
 
-    encodeMessageObjectSize(size: number): ArrayBuffer {
+    private static encodeMessageObjectSize(size: number): ArrayBuffer {
         let data = new ArrayBuffer(4);
         let view = new DataView(data);
-        view.setUint32(0, size, true);
+        view.setUint32(0, size, false);
         return data
     }
 
-    readMessageObject(message: ArrayBuffer, offset: number, pbMessageObject: any): { moMessageObject: any, size: number} {
+    public static readMessageObject(message: ArrayBuffer, offset: number, pbMessageObject: any): { moMessageObject: any, size: number} {
         const FUNC = 'readMessageObject()';
         try {
-            let headerSize = this.readMessageObjectSize(message, offset);
+            let headerSize = Dispatcher.readMessageObjectSize(message, offset);
             let data = new Uint8Array(message, offset + 4, headerSize);
             let moMessageObject = pbMessageObject.decode(data);
             return { moMessageObject, size: 4 + headerSize };
@@ -54,11 +54,11 @@ export class Dispatcher
         }
     }
 
-    encodeMessageObject(pbMessageObject: any, moMessageObject: any): ArrayBuffer {
+    public static encodeMessageObject(pbMessageObject: any, moMessageObject: any): ArrayBuffer {
         const FUNC = 'encodeMessageObject()';
         try {
             let dataMo = pbMessageObject.encode(moMessageObject).finish();
-            let dataMoSize = this.encodeMessageObjectSize(dataMo.length);
+            let dataMoSize = Dispatcher.encodeMessageObjectSize(dataMo.length);
 
             let data = new Uint8Array(dataMoSize.byteLength + dataMo.length);
             // serialize message object size to view
@@ -75,7 +75,7 @@ export class Dispatcher
     }
 
     private _dispatch(message: ArrayBuffer, offset: number) {
-        let { moMessageObject: moMessageHeader, size } = this.readMessageObject(message, offset, this.pbMessageHeader);
+        let { moMessageObject: moMessageHeader, size } = Dispatcher.readMessageObject(message, offset, this.pbMessageHeader);
         offset += size;
         this.__dispatch(message, offset, moMessageHeader);
     }
@@ -87,7 +87,7 @@ export class Dispatcher
             if (moMessageHeader.classId === CLASS_ID_BaseMessages) {
                 if (moMessageHeader.methodId === METHOD_ID_ReceiveString) {
                     let pbMessage = this.pbRoot.root.lookupType('GaoProtobuf.StringMessage');
-                    let { moMessageObject: moMessage, size } = this.readMessageObject(message, offset, pbMessage);
+                    let { moMessageObject: moMessage, size } = Dispatcher.readMessageObject(message, offset, pbMessage);
                     BaseMessages.receiveString(moMessage.str);
                     offset += size;
                 } else {
@@ -102,8 +102,8 @@ export class Dispatcher
             if (moMessageHeader.classId === CLASS_ID_Authenticate) {
                 if (moMessageHeader.methodId === METHOD_ID_AuthenticateResponse) {
                     let pbAuthenticateResponse = this.pbRoot.root.lookupType('GaoProtobuf.AuthenticateResponse');
-                    let pbAuthenticationResultEnum = this.pbRoot.root.lookupType('GaoProtobuf.AuthenticationResult');
-                    let { moMessageObject: moMessage, size } = this.readMessageObject(message, offset, pbAuthenticateResponse);
+                    let { moMessageObject: moMessage, size } = Dispatcher.readMessageObject(message, offset, pbAuthenticateResponse);
+                    WsAuthentication.receiveAuthenticateResponse(moMessage, this.pbRoot.root.lookupEnum('GaoProtobuf.AuthenticationResult'));
                 } else {
                     console.warn(`${FILE}:${FUNC}: unknown methodId: ${moMessageHeader.methodId}`);
                 }
@@ -119,8 +119,13 @@ export class Dispatcher
     }
 
     public dispatch(message: ArrayBuffer) {
-        console.log('dispatching message:', message);
-        this._dispatch(message, 0);
+        try
+        {
+            this._dispatch(message, 0);
+        } catch (err) {
+            console.error(`${FILE}:dispatch(): ${err}`, err);
+            throw new Error('dispatch() failed');
+        }
     }
 
     private disposeRequests() {
