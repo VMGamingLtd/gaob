@@ -1,11 +1,4 @@
 import { WebSocketClient } from './wsClient';
-import { ProtobufRoot } from './proto';
-import { Dispatcher } from './dispatcher';
-import {
-    NAMESPACE_ID__UnityBrowserChannel,
-    CLASS_ID_BaseMessages,
-    METHOD_ID_ReceiveString
-} from './dispatcher';
 import { BaseMessages } from './messages/unityBrowserMessaging/BaseMessages'
 
 const FILE = 'index.ts';
@@ -18,26 +11,7 @@ export function  sendStringToUnity(str: string): void {
     const FUNC = 'sendStringToUnity()';
     try
     {
-        // unity is running in editor, call wsClient
-
-        let dispatcher: Dispatcher = WebSocketClient.gWsClient.dispatcher;
-
-        let pbMessageHeader = WebSocketClient.gPbRoot.root.lookupType('GaoProtobuf.MessageHeader');
-        let pbMessageString = WebSocketClient.gPbRoot.root.lookupType('GaoProtobuf.MessageString');
-
-        let moMessageHeader = pbMessageHeader.create({namespaceId: NAMESPACE_ID__UnityBrowserChannel, classId: CLASS_ID_BaseMessages, methodId: METHOD_ID_ReceiveString});
-        let moMessageString = pbMessageString.create({str: str});
-
-        // encode message header
-        let dataMessageHeader = Dispatcher.encodeMessageObject(pbMessageHeader, moMessageHeader);
-        let dataMessageString = Dispatcher.encodeMessageObject(pbMessageString, moMessageString);
-
-        // concatenate message header and message string
-        let data = new Uint8Array(dataMessageHeader.byteLength + dataMessageString.byteLength);
-        data.set(new Uint8Array(dataMessageHeader), 0);
-        data.set(new Uint8Array(dataMessageString), dataMessageHeader.byteLength);
-
-        WebSocketClient.gWsClient.send(moMessageHeader, data.buffer);
+        BaseMessages.sendString(str);
     } catch (err) {
         console.error(`${FILE}:${FUNC}: ${err}`);
     }
@@ -50,7 +24,7 @@ function keepPinging() {
                 message: "Hello from browser!"
             }
         );
-        BaseMessages.sendString(msg);
+        sendStringToUnity(msg);
     }, 5000)
 
 }

@@ -9,24 +9,35 @@ if (!(window as any).GAO_UnityBrowserChannel.BaseMessages) {
     (window as any).GAO_UnityBrowserChannel.BaseMessages = {}
 } 
 
-(window as any).GAO_UnityBrowserChannel.BaseMessages.receiveString = BaseMessages.receiveString;
+(window as any).GAO_UnityBrowserChannel.BaseMessages.receiveString = function (str: string) {
+    console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ cp 2000: GAO_UnityBrowserChannel.BaseMessages.receiveString(): ${str}`);
+    BaseMessages.receiveString(str);
+}
 
 
 export function  sendStringToUnity(str: string): void {
     const FUNC = 'sendStringToUnity()';
+    console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ cp 2100: sendStringToUnity(): ${str}`);
     try
     {
-        if (!(window as any).GAO_UnityBrowserChannel) {
-            throw new Error('window.GAO_UnityBrowserChannel is not defined');
-        } 
-        if (!(window as any).GAO_UnityBrowserChannel.BaseMessages) {
-            throw new Error('window.GAO_UnityBrowserChannel.BaseMessages is not defined');
-        } 
-        if (!(window as any).GAO_UnityBrowserChannel.BaseMessages.sendString) {
-            throw new Error('window.GAO_UnityBrowserChannel.BaseMessages.sendString is not defined');
-        }
-        (window as any).GAO_UnityBrowserChannel.BaseMessages.sendString(str);
+        BaseMessages.sendString(str);
     } catch (err) {
         console.error(`${FILE}:${FUNC}: ${err}`);
     }
 }
+
+function keepPinging() {
+    setInterval(() => {
+        let msg = JSON.stringify(
+            {
+                message: "Hello from browser!"
+            }
+        );
+        sendStringToUnity(msg);
+    }, 5000)
+
+}
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@
+keepPinging();
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@
