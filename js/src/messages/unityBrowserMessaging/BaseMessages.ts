@@ -38,7 +38,8 @@ export class BaseMessages
                         throw new Error('window.GAO_UnityBrowserChannel.BaseMessages is not defined');
                     } 
                     if (!(window as any).GAO_UnityBrowserChannel.BaseMessages.sendString) {
-                        throw new Error('window.GAO_UnityBrowserChannel.BaseMessages.sendString is not defined');
+                        console.warn(`${BaseMessages.CLASS_NAME}:${FUNC}: window.GAO_UnityBrowserChannel.BaseMessages.sendString is no yet defined, message not sent`);
+                        return;
                     }
                     (window as any).GAO_UnityBrowserChannel.BaseMessages.sendString(str);
                 } catch (err) {

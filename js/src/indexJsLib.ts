@@ -10,14 +10,12 @@ if (!(window as any).GAO_UnityBrowserChannel.BaseMessages) {
 } 
 
 (window as any).GAO_UnityBrowserChannel.BaseMessages.receiveString = function (str: string) {
-    console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ cp 2000: GAO_UnityBrowserChannel.BaseMessages.receiveString(): ${str}`);
     BaseMessages.receiveString(str);
 }
 
 
 export function  sendStringToUnity(str: string): void {
     const FUNC = 'sendStringToUnity()';
-    console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ cp 2100: sendStringToUnity(): ${str}`);
     try
     {
         BaseMessages.sendString(str);
@@ -39,5 +37,7 @@ function keepPinging() {
 }
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@
-keepPinging();
+if (false) {
+    keepPinging();
+}
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@
