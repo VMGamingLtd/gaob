@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package GaoProtobuf;
+option csharp_namespace = "GaoProtobuf";
+
+message AuthenticateRequest {
+  string token = 1;
+  string requestId = 2;
+};
+
+enum AuthenticationResult {
+  success = 0;
+  unauthorized = 1;
+  error = 2;
+}
+
+message AuthenticateResponse {
+  AuthenticationResult result = 1;
+  string requestId = 2;
+}

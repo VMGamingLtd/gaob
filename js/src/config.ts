@@ -1,0 +1,1 @@
+export const WEBSOCKET_SERVER_URL = "wss://local.galacticodyssey.space/gaos/ws"
